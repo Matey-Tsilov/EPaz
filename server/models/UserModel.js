@@ -2,13 +2,10 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 
 const userSchema = new mongoose.Schema({
-  //example properties with mongooseValidations
-  //Change when doing a project!
   username: {
     type: String,
     required: [true, 'The username is required!'],
     minLength: [5, 'The username should be atleast 5 characters long!']
-    //add custom msgs: [true, 'Username field is mandatory!']
   },
   email: {
     type: String,

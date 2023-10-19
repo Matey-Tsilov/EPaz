@@ -1,11 +1,11 @@
 const router = require('express').Router()
 const { isUser, isOwner } = require('../middlewares/guards')
-const collectionService = require('../services/collectionService')
+const productService = require("../services/productService")
 const mongooseErrorMapper = require('../utils/mongooseErrorMapper')
 
 router.get('/', async (req, res) => {
     try {
-        const items = await collectionService.getAll()
+        const items = await productService.getAll()
         res.json(items)
     } catch (error) {
         const errorMsg = mongooseErrorMapper(error)
@@ -15,7 +15,7 @@ router.get('/', async (req, res) => {
 router.get('/:id', async (req, res) => {
     const id = req.params.id
     try {
-        const item = await collectionService.getById(id)
+        const item = await productService.getById(id)
         res.json(item)
     } catch (error) {
         const errorMsg = mongooseErrorMapper(error)
@@ -26,28 +26,28 @@ router.post('/', isUser(), async (req, res) => {
     const body = req.body
     body._ownerId = req.user._id
     try {
-        const createdItem = await collectionService.create(body)
+        const createdItem = await productService.create(body)
         res.status(201).json(createdItem)
     } catch (error) {
         const errorMsg = mongooseErrorMapper(error)
         res.status(404).json({message: errorMsg})
     }
 })
-router.put('/:id', isUser(), isOwner(collectionService), async (req, res) => {
+router.put('/:id', isUser(), isOwner(productService), async (req, res) => {
     const id = req.params.id
     const updatedItem = req.body
     try {
-        const result = await collectionService.updateById(id, updatedItem)
+        const result = await productService.updateById(id, updatedItem)
         res.json(result)
     } catch (error) {
         const errorMsg = mongooseErrorMapper(error)
         res.status(404).json({message: errorMsg})
     }
 })
-router.delete('/:id', isUser(), isOwner(collectionService), async (req, res) => {
+router.delete('/:id', isUser(), isOwner(productService), async (req, res) => {
     const id = req.params.id
     try {
-        const result = await collectionService.deleteById(id)
+        const result = await productService.deleteById(id)
         res.json(result)
     } catch (error) {
         const errorMsg = mongooseErrorMapper(error)
